@@ -34,6 +34,7 @@ export interface IProduct {
     stock: number;
     image: string;
     categoryId: number;
+    fetchProductDetail?: (id: number) => Promise<IProduct>;
 }
 
 // Interfaz para usuario registrado
