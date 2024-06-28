@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [token, setToken] = useState('');
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -14,14 +15,31 @@ const Login: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí puedes agregar validaciones adicionales si es necesario
     if (email && password) {
-      console.log('Logeo exitoso');
-      // Limpiar los campos después del logeo
-      setEmail('');
-      setPassword('');
+      try {
+        const response = await fetch('http://localhost:5767/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const json = await response.json();
+          setToken(json.token);
+          console.log('Usuario logado:', json);
+          localStorage.setItem('token', json.token);
+          setEmail('');
+          setPassword('');
+        } else {
+          console.log('Error al logar el usuario');
+        }
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
     } else {
       console.log('Por favor, complete todos los campos');
     }

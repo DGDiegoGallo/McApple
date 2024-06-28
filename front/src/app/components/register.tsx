@@ -29,17 +29,36 @@ const Register: React.FC = () => {
     setPhone(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Aquí puedes agregar validaciones adicionales si es necesario
     if (name && email && password && address && phone) {
-      console.log('Usuario registrado');
-      // Limpiar los campos después del registro
-      setName('');
-      setEmail('');
-      setPassword('');
-      setAddress('');
-      setPhone('');
+      const userData = { name, email, password, address, phone };
+      console.log('Datos enviados:', userData);
+
+      try {
+        const response = await fetch('http://localhost:5767/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (response.ok) {
+          console.log('Usuario registrado');
+          // Limpiar los campos después del registro
+          setName('');
+          setEmail('');
+          setPassword('');
+          setAddress('');
+          setPhone('');
+        } else {
+          console.log('Error al registrar el usuario');
+        }
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
     } else {
       console.log('Por favor, complete todos los campos');
     }

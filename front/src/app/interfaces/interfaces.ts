@@ -15,8 +15,10 @@ export interface ILoginUser {
 
 // Interfaz para orden
 export interface IOrder {
-    userId: number;
-    products: number[];
+    id: number;
+    status: string;
+    date: string;
+    products: IProduct[];
 }
 
 // Interfaz para credenciales
