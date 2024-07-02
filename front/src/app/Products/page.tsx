@@ -1,18 +1,33 @@
-import React from 'react';
+"use client"
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { IProduct } from '../interfaces/interfaces';
-import CartProduct from '../components/ProductsComponent/CartProduct';
+import { IProduct } from '../../interfaces/interfaces';
+import CartProduct from '../../components/ProductsComponent/CartProduct';
+import { fetchProducts } from '../../utils/fetchProducts';
 
-export const fetchProducts = async (): Promise<IProduct[]> => {
-  const response = await fetch('http://localhost:5767/products');
-  if (!response.ok) {
-    throw new Error('Failed to fetch products');
+const ProductsPage: React.FC = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const products = await fetchProducts();
+        setProducts(products);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
   }
-  return response.json();
-};
-
-const ProductsPage: React.FC = async () => {
-  const products = await fetchProducts();
 
   return (
     <main className="flex flex-col items-center p-24">

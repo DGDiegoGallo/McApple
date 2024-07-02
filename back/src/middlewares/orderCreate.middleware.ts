@@ -34,3 +34,4 @@ const validateItemsExist = async (
 };
 
 export default [validateOrderFields, validateItemsExist];
+

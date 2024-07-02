@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import Logout from '../components/DashboardComponent/Logout';
+import Logout from '../../components/DashboardComponent/Logout';
 
 const Dashboard: React.FC = () => {
     return (

@@ -1,5 +1,5 @@
-import Card from '../../components/Card';
-import { fetchProducts } from '../page';
+import Card from '../../../components/Card';
+import { fetchProducts } from '../../../utils/fetchProducts';
 
 const Product = async ({ params }) => {
   const products = await fetchProducts();
