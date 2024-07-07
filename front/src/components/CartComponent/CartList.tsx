@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IProduct } from '../../interfaces/interfaces';
 import CartItem from './CartItem';
+import { useGetToken } from '../../app/context/auth';
 
 interface CartListProps {
-  products: IProduct[];
+  products?: IProduct[];
 }
 
-const CartList: React.FC<CartListProps> = ({ products }) => {
+const CartList: React.FC<CartListProps> = ({ products = [] }) => {
+  const [cartProducts, setCartProducts] = useState<IProduct[]>(products);
+  const token = useGetToken();
+
+  useEffect(() => {
+    if (token) {
+      const cartKey = `cart_${token}`;
+      const storedCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+      setCartProducts(storedCart);
+    }
+  }, [token]);
+
   return (
     <div>
-      {products.map(product => (
+      {cartProducts.map(product => (
         <CartItem
           key={product.id}
           product={product}
