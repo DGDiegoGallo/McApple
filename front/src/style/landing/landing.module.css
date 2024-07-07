@@ -1,0 +1,8 @@
+.parallax {
+  background-image: url('https://www.apple.com/la/iphone/compare/images/meta/compare__b5xf30djrsia_og.png?202403141233');
+  height: 400px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

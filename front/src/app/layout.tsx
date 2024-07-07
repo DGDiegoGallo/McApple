@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +17,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = cookies().get('token')?.value || null;
+  const isLoggedIn = !!token;
+
   return (
     <html lang="en" className="h-full">
       <body className={`flex flex-col min-h-screen ${inter.className}`}>
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn} />
         <main className="flex-grow">{children}</main>
         <Footer />
       </body>

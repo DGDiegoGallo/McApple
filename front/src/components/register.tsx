@@ -53,6 +53,8 @@ const Register: React.FC = () => {
           setPassword('');
           setAddress('');
           setPhone('');
+          // Redirigir al usuario a la página de login
+          window.location.href = '/login';
         } else {
           console.log('Error al registrar el usuario');
         }

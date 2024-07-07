@@ -1,16 +1,11 @@
-"use client"
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
-const Navbar: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+interface NavbarProps {
+  isLoggedIn: boolean;
+}
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
-
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
   return (
     <nav className="bg-gray-800 p-4 flex justify-between">
       <ul className="flex space-x-4">

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IProduct } from '../../interfaces/interfaces';
+import { useGetToken } from '../../app/context/auth';
 
 interface CartProductProps {
   product: IProduct;
@@ -11,47 +12,21 @@ interface CartProductProps {
 const CartProduct: React.FC<CartProductProps> = ({ product }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const token = useGetToken(); // Llamada al hook fuera de useEffect
   const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
-    const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-  }, []);
+  }, [token]); // Dependencia de token
 
-  const handleAddToCart = async () => {
-    if (!router) return;
-    const token = localStorage.getItem('token');
+  const handleAddToCart = () => {
     if (!token) {
       console.log('Usuario no logeado');
       return;
     }
 
-    console.log('Token enviado:', token); // Agregar este log
-
-    const requestBody = { products: [product.id] };
-    console.log('Datos enviados:', requestBody);
-
-    try {
-      const response = await fetch('http://localhost:5767/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${token}`,
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (response.ok) {
-        console.log('Producto agregado al carrito:', product);
-        router.push('/cart');
-      } else {
-        const errorData = await response.json();
-        console.log('Error al agregar el producto al carrito:', errorData);
-      }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-    }
+    router.push(`/cart?productId=${product.id}`);  // Redirigir al carrito de compras con el ID del producto
   };
 
   if (!isLoggedIn || !isClient) {

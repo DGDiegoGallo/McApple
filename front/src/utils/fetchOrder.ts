@@ -1,7 +1,6 @@
 import { IOrder } from '../interfaces/interfaces';
 
-export const fetchCartOrders = async (): Promise<IOrder[] | null> => {
-  const token = localStorage.getItem('token');
+export const fetchCartOrders = async (token: string): Promise<IOrder[] | null> => {
   if (!token) {
     console.log('Usuario no logeado');
     return null;

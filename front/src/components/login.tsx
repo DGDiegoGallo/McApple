@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useGetToken } from '../app/context/auth';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+  const token = useGetToken();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -29,11 +30,11 @@ const Login: React.FC = () => {
 
         if (response.ok) {
           const json = await response.json();
-          setToken(json.token);
           console.log('Usuario logado:', json);
-          localStorage.setItem('token', json.token);
+          document.cookie = `token=${json.token}; path=/; SameSite=Lax`;
           setEmail('');
           setPassword('');
+          window.location.reload(); // Recargar la página para que se actualice el estado de autenticación
         } else {
           console.log('Error al logar el usuario');
         }
