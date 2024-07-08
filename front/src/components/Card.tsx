@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import { IProduct } from '../interfaces/interfaces';
 import Image from 'next/image';
