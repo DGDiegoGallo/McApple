@@ -19,6 +19,10 @@ const CartList: React.FC<CartListProps> = ({ products = [] }) => {
     }
   }, [token]);
 
+  const handleUpdateCart = (updatedCart: IProduct[]) => {
+    setCartProducts(updatedCart);
+  };
+
   return (
     <div>
       {cartProducts.map(product => (
@@ -27,6 +31,7 @@ const CartList: React.FC<CartListProps> = ({ products = [] }) => {
           product={product}
           onPurchase={() => {}}
           onRemove={() => {}}
+          onUpdateCart={handleUpdateCart}
         />
       ))}
     </div>

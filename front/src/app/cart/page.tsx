@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CartList from '../../components/CartComponent/CartList';
 import { IProduct } from '../../interfaces/interfaces';
 import { useGetToken } from '../context/auth';
+import withAuth from '../../components/Validations/ProtectedRoute';
 
 const Cart: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -38,4 +39,4 @@ const Cart: React.FC = () => {
   );
 };
 
-export default Cart;
+export default withAuth(Cart);

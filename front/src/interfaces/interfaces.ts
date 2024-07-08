@@ -18,7 +18,6 @@ export interface IOrder {
     id: number;
     status: string;
     date: string;
-    products: IProduct[];
 }
 
 // Interfaz para credenciales
@@ -54,6 +53,18 @@ export interface ILoginUserWithToken {
     email: string;
     password: string;
     token: string;
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        address: string;
+        phone: string;
+        role: string;
+        credential: {
+            id: number;
+            password: string;
+        };
+    };
 }
 
 // Interfaz para usuario registrado con token

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React from 'react';
 import { useGetToken } from '../../app/context/auth';
@@ -8,8 +8,12 @@ const Logout: React.FC = () => {
 
   const handleLogout = () => {
     if (token) {
-      localStorage.removeItem(`cart_${token}`);
-      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      localStorage.clear();
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
     }
     window.location.href = '/';
   };

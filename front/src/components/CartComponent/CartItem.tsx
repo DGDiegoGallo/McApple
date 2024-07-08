@@ -9,9 +9,10 @@ interface CartItemProps {
   product: IProduct;
   onPurchase: (productId: number) => void;
   onRemove: (productId: number) => void;
+  onUpdateCart: (updatedCart: IProduct[]) => void;
 }
 
-export const handlePurchase = async (productId: number, token: string | null, onPurchase: (productId: number) => void) => {
+export const handlePurchase = async (productId: number, token: string | null, onPurchase: (productId: number) => void, onUpdateCart: (updatedCart: IProduct[]) => void) => {
   onPurchase(productId);
 
   try {
@@ -42,6 +43,15 @@ export const handlePurchase = async (productId: number, token: string | null, on
         body: JSON.stringify({ quantity: 1 }),
       });
 
+      // Eliminar el producto del almacenamiento local
+      const cartKey = `cart_${token}`;
+      const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+      const updatedCart = cart.filter((item: IProduct) => item.id !== productId);
+      localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+
+      // Actualizar el estado del carrito
+      onUpdateCart(updatedCart);
+
       window.location.href = '/dashboard';
     } else {
       const errorData = await response.json();
@@ -52,7 +62,7 @@ export const handlePurchase = async (productId: number, token: string | null, on
   }
 };
 
-const CartItem: React.FC<CartItemProps> = ({ product, onPurchase, onRemove }) => {
+const CartItem: React.FC<CartItemProps> = ({ product, onPurchase, onRemove, onUpdateCart }) => {
   const token = useGetToken();
 
   const handleRemoveFromCart = async (productId: number) => {
@@ -67,15 +77,18 @@ const CartItem: React.FC<CartItemProps> = ({ product, onPurchase, onRemove }) =>
     localStorage.setItem(cartKey, JSON.stringify(updatedCart));
     console.log('Producto eliminado del carrito:', productId);
     onRemove(productId);
+
+    // Actualizar el estado del carrito
+    onUpdateCart(updatedCart);
   };
 
   return (
-    <div className="card border border-gray-300 p-4 rounded-lg shadow-md">
+    <div className={`card border border-gray-300 p-4 rounded-lg shadow-md ${product.stock === 0 ? 'bg-gray-300' : ''}`}>
       <Card {...product} />
       <button onClick={() => handleRemoveFromCart(product.id)} className="btn-primary mt-4 border border-gray-300 rounded">
         Eliminar
       </button>
-      <button onClick={() => handlePurchase(product.id, token, onPurchase)} className="btn-primary mt-4 border border-gray-300 rounded">
+      <button onClick={() => handlePurchase(product.id, token, onPurchase, onUpdateCart)} className="btn-primary mt-4 border border-gray-300 rounded" disabled={product.stock === 0}>
         Comprar
       </button>
     </div>

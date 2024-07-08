@@ -48,6 +48,7 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
     <button
       onClick={handleAddToCart}
       className={`btn-primary mt-4 border-black rounded flex items-center transform transition duration-500 hover:scale-105 ${isClicked ? 'bg-green-500' : ''}`}
+      disabled={product.stock === 0}
     >
       {isClicked ? 'Producto enviado exitosamente.' : (
         <>
