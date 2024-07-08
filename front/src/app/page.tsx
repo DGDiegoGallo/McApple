@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { MdEditDocument, MdAddShoppingCart } from "react-icons/md";
 import { IoBagCheckOutline } from "react-icons/io5";
 

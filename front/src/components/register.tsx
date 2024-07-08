@@ -57,7 +57,6 @@ const Register: React.FC = () => {
     }
 
     const userData = { name, email, password, address, phone };
-    console.log('Datos enviados:', userData);
 
     try {
       const response = await fetch('http://localhost:5767/users/register', {
@@ -69,7 +68,6 @@ const Register: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log('Usuario registrado');
         setName('');
         setEmail('');
         setPassword('');
@@ -77,7 +75,6 @@ const Register: React.FC = () => {
         setPhone('');
         window.location.href = '/login';
       } else {
-        console.log('Error al registrar el usuario');
         setShowModal(true);
       }
     } catch (error) {

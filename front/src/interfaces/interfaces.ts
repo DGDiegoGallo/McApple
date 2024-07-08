@@ -1,4 +1,3 @@
-// Interfaz para registrar usuario
 export interface IRegisterUser {
     name: string;
     email: string;
@@ -7,26 +6,22 @@ export interface IRegisterUser {
     phone: string;
 }
 
-// Interfaz para login de usuario
 export interface ILoginUser {
     email: string;
     password: string;
 }
 
-// Interfaz para orden
 export interface IOrder {
     id: number;
     status: string;
     date: string;
 }
 
-// Interfaz para credenciales
 export interface ICredential {
     id: number;
     password: string;
 }
 
-// Interfaz para productos
 export interface IProduct {
     id: number;
     name: string;
@@ -38,7 +33,6 @@ export interface IProduct {
     fetchProductDetail?: (id: number) => Promise<IProduct>;
 }
 
-// Interfaz para usuario registrado
 export interface IRegisteredUser {
     id: number;
     name: string;
@@ -48,7 +42,6 @@ export interface IRegisteredUser {
     role: string;
 }
 
-// Interfaz para login con token
 export interface ILoginUserWithToken {
     email: string;
     password: string;
@@ -67,7 +60,6 @@ export interface ILoginUserWithToken {
     };
 }
 
-// Interfaz para usuario registrado con token
 export interface IRegisteredUserWithToken {
     id: number;
     name: string;

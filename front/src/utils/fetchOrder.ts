@@ -2,7 +2,6 @@ import { IOrder } from '../interfaces/interfaces';
 
 export const fetchCartOrders = async (token: string): Promise<IOrder[] | null> => {
   if (!token) {
-    console.log('Usuario no logeado');
     return null;
   }
 
@@ -17,7 +16,6 @@ export const fetchCartOrders = async (token: string): Promise<IOrder[] | null> =
     if (response.ok) {
       return await response.json();
     } else {
-      console.log('Error al obtener las órdenes del carrito');
       return null;
     }
   } catch (error) {

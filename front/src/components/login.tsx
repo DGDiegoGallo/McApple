@@ -67,14 +67,12 @@ const Login: React.FC = () => {
 
       if (response.ok) {
         const json = await response.json();
-        console.log('Usuario logado:', json);
         document.cookie = `token=${json.token}; path=/; SameSite=Lax`;
         localStorage.setItem('user', JSON.stringify(json.user));
         setEmail('');
         setPassword('');
-        window.location.reload(); // Recargar la página para que se actualice el estado de autenticación
+        window.location.href = '/home'; 
       } else if (response.status === 400) {
-        console.log('Error al logar el usuario');
         setShowModal(true);
       }
     } catch (error) {
@@ -107,7 +105,7 @@ const Login: React.FC = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg">
-            <h2 className="text-xl font-bold">¡El usuario no existe!</h2>
+            <h2 className="text-xl font-bold">¡El usuario no existe, o la contraseña y el usuario es incorrecto!</h2>
             <button onClick={() => setShowModal(false)} className="btn-primary mt-4">Cerrar</button>
           </div>
         </div>

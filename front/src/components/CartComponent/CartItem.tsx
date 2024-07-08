@@ -17,7 +17,6 @@ export const handlePurchase = async (productId: number, token: string | null, on
 
   try {
     if (!token) {
-      console.log('Usuario no logeado');
       return;
     }
 
@@ -32,8 +31,6 @@ export const handlePurchase = async (productId: number, token: string | null, on
     });
 
     if (response.ok) {
-      console.log('Orden de compra creada para el producto:', productId);
-
       await fetch(`http://localhost:5767/products/${productId}/reduce-stock`, {
         method: 'POST',
         headers: {
@@ -43,19 +40,17 @@ export const handlePurchase = async (productId: number, token: string | null, on
         body: JSON.stringify({ quantity: 1 }),
       });
 
-      // Eliminar el producto del almacenamiento local
       const cartKey = `cart_${token}`;
       const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
       const updatedCart = cart.filter((item: IProduct) => item.id !== productId);
       localStorage.setItem(cartKey, JSON.stringify(updatedCart));
 
-      // Actualizar el estado del carrito
       onUpdateCart(updatedCart);
 
       window.location.href = '/dashboard';
     } else {
       const errorData = await response.json();
-      console.log('Error al crear la orden de compra:', errorData);
+      console.error('Error al crear la orden de compra:', errorData);
     }
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -67,7 +62,6 @@ const CartItem: React.FC<CartItemProps> = ({ product, onPurchase, onRemove, onUp
 
   const handleRemoveFromCart = async (productId: number) => {
     if (!token) {
-      console.log('Usuario no logeado');
       return;
     }
 
@@ -75,22 +69,29 @@ const CartItem: React.FC<CartItemProps> = ({ product, onPurchase, onRemove, onUp
     const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
     const updatedCart = cart.filter((item: IProduct) => item.id !== productId);
     localStorage.setItem(cartKey, JSON.stringify(updatedCart));
-    console.log('Producto eliminado del carrito:', productId);
     onRemove(productId);
 
-    // Actualizar el estado del carrito
     onUpdateCart(updatedCart);
   };
 
   return (
     <div className={`card border border-gray-300 p-4 rounded-lg shadow-md ${product.stock === 0 ? 'bg-gray-300' : ''}`}>
       <Card {...product} />
-      <button onClick={() => handleRemoveFromCart(product.id)} className="btn-primary mt-4 border border-gray-300 rounded">
-        Eliminar
-      </button>
-      <button onClick={() => handlePurchase(product.id, token, onPurchase, onUpdateCart)} className="btn-primary mt-4 border border-gray-300 rounded" disabled={product.stock === 0}>
-        Comprar
-      </button>
+      <div className="flex flex-col items-center mt-4">
+        <button
+          onClick={() => handlePurchase(product.id, token, onPurchase, onUpdateCart)}
+          className="btn-primary mb-4 border border-gray-300 rounded bg-green-500 hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105 py-3 px-6"
+          disabled={product.stock === 0}
+        >
+          Comprar
+        </button>
+        <button
+          onClick={() => handleRemoveFromCart(product.id)}
+          className="btn-primary border border-gray-300 rounded bg-red-500 hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 py-3 px-6"
+        >
+          Eliminar
+        </button>
+      </div>
     </div>
   );
 };

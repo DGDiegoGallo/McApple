@@ -14,17 +14,16 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const token = useGetToken(); // Llamada al hook fuera de useEffect
+  const token = useGetToken();
   const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
     setIsLoggedIn(!!token);
-  }, [token]); // Dependencia de token
+  }, [token]);
 
   const handleAddToCart = () => {
     if (!token) {
-      console.log('Usuario no logeado');
       return;
     }
 
@@ -32,12 +31,11 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
     const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
     const updatedCart = [...cart, product];
     localStorage.setItem(cartKey, JSON.stringify(updatedCart));
-    console.log('Producto añadido al carrito:', product.id);
 
     setIsClicked(true);
     setTimeout(() => {
       setIsClicked(false);
-    }, 1000); // Cambia el color y muestra el mensaje por 1 segundo
+    }, 1000);
   };
 
   if (!isLoggedIn || !isClient) {

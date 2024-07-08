@@ -12,7 +12,7 @@ const withAuth = (WrappedComponent: React.FC) => {
     const router = useRouter();
 
     useEffect(() => {
-      if (typeof window !== 'undefined') { // Verificación para asegurarse de que el código se ejecute solo en el cliente
+      if (typeof window !== 'undefined') {
         if (!token) {
           setShowModal(true);
           setTimeout(() => {
