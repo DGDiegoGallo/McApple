@@ -1,5 +1,3 @@
-
-
 interface ValidationRegisterProps {
   errors: {
     nameEmpty: boolean;
@@ -7,7 +5,7 @@ interface ValidationRegisterProps {
     emailEmpty: boolean;
     emailInvalid: boolean;
     passwordEmpty: boolean;
-    passwordWeak: boolean;
+    passwordInvalid: boolean;
     addressEmpty: boolean;
     addressInvalid: boolean;
     phoneEmpty: boolean;
@@ -23,7 +21,7 @@ const ValidationRegister: React.FC<ValidationRegisterProps> = ({ errors }) => {
       {errors.emailEmpty && <p>El email es obligatorio.</p>}
       {!errors.emailEmpty && errors.emailInvalid && <p>Email inválido.</p>}
       {errors.passwordEmpty && <p>La contraseña es obligatoria.</p>}
-      {!errors.passwordEmpty && errors.passwordWeak && <p>Contraseña poca segura.</p>}
+      {!errors.passwordEmpty && errors.passwordInvalid && <p>Contraseña poca segura.</p>}
       {errors.addressEmpty && <p>La dirección es obligatoria.</p>}
       {!errors.addressEmpty && errors.addressInvalid && <p>Dirección inválida.</p>}
       {errors.phoneEmpty && <p>El teléfono es obligatorio.</p>}

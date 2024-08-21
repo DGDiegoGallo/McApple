@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { TfiApple } from "react-icons/tfi";
 import CartIconWithCount from './CartIconWithCount';
+import WelcomeUser from './welcomeuser';
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -31,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
       <ul className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 mt-2 md:mt-0 items-center md:items-stretch">
         {isLoggedIn && (
           <>
-            <li className="border-none h-full flex items-center">
+            <li className="flex items-center p-2 bg-gray-700 rounded shadow-lg transform transition-transform duration-200 hover:scale-95">
               <CartIconWithCount />
             </li>
             <li className="md:border-l border-gray-400 h-full flex items-center">
@@ -40,6 +41,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
                   <IoPersonCircleOutline size={28} />
                 </div>
               </Link>
+            </li>
+            <li className="flex items-center p-2 bg-gray-700 rounded shadow-lg transform transition-transform duration-200 hover:scale-95 text-white">
+              <WelcomeUser />
             </li>
           </>
         )}
@@ -62,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
           </>
         )}
       </ul>
-    </nav>
+    </nav>  
   );
 };
 

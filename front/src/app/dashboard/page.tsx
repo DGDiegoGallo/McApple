@@ -35,7 +35,7 @@ const Dashboard = async ({ searchParams }) => {
 
     return (
         <main className="flex flex-col items-center justify-center min-h-screen p-24">
-            <h1 className="text-4xl font-bold">Dashboard de Usuario</h1>
+            <h1 className="text-4xl font-bold">Datos del Usuario</h1>
             <Logout />
             <UserInfo />
             <section className="mt-8 w-full">

@@ -2,13 +2,17 @@
 
 import React, { useState } from 'react';
 import ValidationRegister from './Validations/registervalidations';
+import fetchRegister from '../utils/fetchRegister';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    address: '',
+    phone: ''
+  });
+
   const [errors, setErrors] = useState({
     nameEmpty: false,
     nameInvalid: false,
@@ -21,34 +25,31 @@ const Register: React.FC = () => {
     phoneEmpty: false,
     phoneInvalid: false,
   });
+
   const [showModal, setShowModal] = useState(false);
 
-  const validateName = (name: string) => /^[a-zA-Z\s]+$/.test(name);
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePassword = (password: string) => /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/.test(password);
-  const validateAddress = (address: string) => /^[a-zA-Z0-9\s,.-]+$/.test(address);
-  const validatePhone = (phone: string) => /^[0-9]+$/.test(phone);
+  const validators = {
+    name: (value: string) => /^[a-zA-Z\s]+$/.test(value),
+    email: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    password: (value: string) => /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/.test(value),
+    address: (value: string) => /^[a-zA-Z0-9\s,.-]+$/.test(value),
+    phone: (value: string) => /^[0-9]+$/.test(value),
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const nameEmpty = !name;
-    const emailEmpty = !email;
-    const passwordEmpty = !password;
-    const addressEmpty = !address;
-    const phoneEmpty = !phone;
 
-    const newErrors = {
-      nameEmpty,
-      nameInvalid: !nameEmpty && !validateName(name),
-      emailEmpty,
-      emailInvalid: !emailEmpty && !validateEmail(email),
-      passwordEmpty,
-      passwordWeak: !passwordEmpty && !validatePassword(password),
-      addressEmpty,
-      addressInvalid: !addressEmpty && !validateAddress(address),
-      phoneEmpty,
-      phoneInvalid: !phoneEmpty && !validatePhone(phone),
-    };
+    const newErrors = Object.keys(formData).reduce((acc, key) => {
+      const value = formData[key as keyof typeof formData];
+      acc[`${key}Empty`] = !value;
+      acc[`${key}Invalid`] = value && !validators[key as keyof typeof validators](value);
+      return acc;
+    }, {} as typeof errors);
 
     setErrors(newErrors);
 
@@ -56,85 +57,52 @@ const Register: React.FC = () => {
       return;
     }
 
-    const userData = { name, email, password, address, phone };
-
     try {
-      const response = await fetch('http://localhost:5767/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
+      const newUser = await fetchRegister(formData);
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        address: '',
+        phone: ''
       });
-
-      if (response.ok) {
-        setName('');
-        setEmail('');
-        setPassword('');
-        setAddress('');
-        setPhone('');
-        window.location.href = '/login';
-      } else {
-        setShowModal(true);
-      }
+      window.location.href = '/login';
     } catch (error) {
-      console.error('Error en la solicitud:', error);
+      setShowModal(true);
     }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setName('');
-    setEmail('');
-    setPassword('');
-    setAddress('');
-    setPhone('');
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      address: '',
+      phone: ''
+    });
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-4xl font-bold mb-4">Registro</h1>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nombre"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <ValidationRegister errors={{ nameEmpty: errors.nameEmpty, nameInvalid: errors.nameInvalid }} />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <ValidationRegister errors={{ emailEmpty: errors.emailEmpty, emailInvalid: errors.emailInvalid }} />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <ValidationRegister errors={{ passwordEmpty: errors.passwordEmpty, passwordWeak: errors.passwordWeak }} />
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Dirección"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <ValidationRegister errors={{ addressEmpty: errors.addressEmpty, addressInvalid: errors.addressInvalid }} />
-        <input
-          type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="Teléfono"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <ValidationRegister errors={{ phoneEmpty: errors.phoneEmpty, phoneInvalid: errors.phoneInvalid }} />
+        {Object.keys(formData).map((key) => (
+          <div key={key}>
+            <input
+              type={key === 'password' ? 'password' : 'text'}
+              name={key}
+              value={formData[key as keyof typeof formData]}
+              onChange={handleChange}
+              placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+              className="mb-2 p-2 border border-gray-300 rounded"
+            />
+            <ValidationRegister errors={{
+              [`${key}Empty`]: errors[`${key}Empty`],
+              [`${key}Invalid`]: errors[`${key}Invalid`]
+            }} />
+          </div>
+        ))}
         <button type="submit" className="btn-primary mt-4">Registrar</button>
       </form>
       {showModal && (

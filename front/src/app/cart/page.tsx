@@ -33,8 +33,10 @@ const Cart: React.FC = () => {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-24">
-      <h1 className="text-4xl font-bold">Carrito de Compras</h1>
-      <CartList products={products} />
+      <h1 className="text-4xl font-bold">
+        {products.length === 0 ? '¡No tienes ningún producto en el Carrito!' : 'Carrito de Compras'}
+      </h1>
+      {products.length > 0 && <CartList products={products} />}
     </main>
   );
 };

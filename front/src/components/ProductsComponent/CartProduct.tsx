@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { IProduct } from '../../interfaces/interfaces';
 import { useGetToken } from '../../app/context/auth';
 import { HiMiniShoppingCart } from "react-icons/hi2";
+import { useCart } from '../../app/context/CartContext';
 
 interface CartProductProps {
   product: IProduct;
@@ -16,6 +17,7 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
   const [isClicked, setIsClicked] = useState(false);
   const token = useGetToken();
   const router = useRouter();
+  const { updateCartCount } = useCart();
 
   useEffect(() => {
     setIsClient(true);
@@ -33,6 +35,7 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
     localStorage.setItem(cartKey, JSON.stringify(updatedCart));
 
     setIsClicked(true);
+    updateCartCount();
     setTimeout(() => {
       setIsClicked(false);
     }, 1000);

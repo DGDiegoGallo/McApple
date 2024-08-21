@@ -19,8 +19,8 @@ const Logout: React.FC = () => {
   };
 
   return (
-    <button onClick={handleLogout} className="btn-primary mt-4">
-      Deslogear
+    <button onClick={handleLogout} className="btn-primary mt-4 bg-gray-600 rounded text-white">
+      Cerrar sesión.
     </button>
   );
 };

@@ -83,7 +83,7 @@ const Login: React.FC = () => {
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center min-h-screen p-4" noValidate>
-        <h1 className="text-4xl font-bold mb-4">Login</h1>
+        <h1 className="text-4xl font-bold mb-4">Iniciar Sesión</h1>
         <input
           type="email"
           value={email}
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
           className="mb-2 p-2 border border-gray-300 rounded"
         />
         <ValidationLogin errors={{ emailEmpty: false, emailInvalid: false, passwordEmpty: errors.passwordEmpty }} />
-        <button type="submit" className="btn-primary mt-4">Login</button>
+        <button type="submit" className="btn-primary mt-4">Iniciar Sesión</button>
       </form>
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -10,6 +10,10 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, currentPage }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+  if (totalItems === 0) {
+    return null;
+  }
+
   return (
     <div className="flex justify-center mt-4">
       <Link href={`?page=${currentPage - 1}`} passHref>
